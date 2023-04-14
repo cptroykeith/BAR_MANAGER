@@ -1,3 +1,13 @@
+def update_inventory(inventory, name, quantity):
+    if name in inventory:
+        if quantity <= inventory[name]:
+            inventory[name] -= quantity
+            return True
+        else:
+            return False
+    else:
+        return False
+
 inventory = {}
 
 print("Welcome to the alcohol bar management program!\n")
@@ -15,6 +25,10 @@ while True:
         for i in range(num_bottles):
             name = input(f"\nEnter the name of bottle #{i+1}: ")
             quantity = int(input("Enter the quantity of the bottle: "))
+
+            if quantity < 0:
+                print("\nInvalid quantity. Please enter a non-negative value.\n")
+                continue
             
             if name in inventory:
                 inventory[name] += quantity
@@ -41,18 +55,13 @@ while True:
 
     elif choice == 3:
         name = input("\nEnter the name of the bottle you want to purchase: ")
-        
-        if name in inventory:
-            quantity = int(input("Enter the quantity you want to purchase: "))
-            
-            if inventory[name] >= quantity:
-                inventory[name] -= quantity
-                print(f"\nYou have purchased {quantity} bottles of {name}.\n")
-            else:
-                print(f"\nThere are only {inventory[name]} bottles of {name} in the bar.\n")
-        else:
-            print(f"\n{name} is not in the bar.\n")
+        quantity = int(input("Enter the quantity you want to purchase: "))
 
+        if update_inventory(inventory, name, quantity):
+            print(f"\nYou have purchased {quantity} bottles of {name}.")
+        else:
+            print(f"\n{name} is either not in the inventory or the quantity you entered is greater than the available quantity.")
+        
 #Print the current inventory of the bar
        
     elif choice == 4:
